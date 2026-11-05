@@ -1,20 +1,32 @@
 import { ObjectId } from "mongodb";
-import { getDatabase } from "@/lib/mongodb";
+import { getDatabase, deleteLocalMessage } from "@/lib/mongodb";
 
 export async function DELETE(req, { params }) {
-  if (!ObjectId.isValid(params.id)) {
-    return Response.json({ error: "Invalid message ID" }, { status: 400 });
+  const id = params.id;
+  if (!id) {
+    return Response.json({ error: "Missing message ID" }, { status: 400 });
   }
 
-  try {
-    const database = await getDatabase();
-    if (!database) {
-      return Response.json({ error: "MONGODB_URI is not configured" }, { status: 503 });
+  // 1. Try deleting from MongoDB if it's a valid ObjectId
+  let deletedFromMongo = false;
+  if (ObjectId.isValid(id)) {
+    try {
+      const database = await getDatabase();
+      if (database) {
+        const result = await database.collection("messages").deleteOne({ _id: new ObjectId(id) });
+        if (result && result.deletedCount > 0) deletedFromMongo = true;
+      }
+    } catch (error) {
+      console.warn("[Admin API] Could not delete from MongoDB, proceeding to local check:", error.message);
     }
-    await database.collection("messages").deleteOne({ _id: new ObjectId(params.id) });
-    return Response.json({ ok: true });
-  } catch (error) {
-    console.error("[Admin] Could not delete message from MongoDB.", error);
-    return Response.json({ error: "MongoDB is unavailable; message was not deleted" }, { status: 503 });
+  }
+
+  // 2. Also ensure local backup removes it
+  try {
+    deleteLocalMessage(id);
+    return Response.json({ ok: true, deletedFromMongo });
+  } catch (err) {
+    console.error("[Admin API] Failed to delete message:", err);
+    return Response.json({ error: "Failed to delete message" }, { status: 500 });
   }
 }

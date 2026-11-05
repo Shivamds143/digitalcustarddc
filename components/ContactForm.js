@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const INIT = { name: "", email: "", phone: "", message: "" };
 
 export default function ContactForm() {
+  const router = useRouter();
   const [fields, setFields]   = useState(INIT);
   const [errors, setErrors]   = useState({});
   const [status, setStatus]   = useState("idle"); // idle | busy | ok | err
@@ -43,6 +45,7 @@ export default function ContactForm() {
         setStatus("ok");
         setFields(INIT);
         setErrors({});
+        router.push("/thank-you");
       } else {
         setStatus("err");
         setErrMsg(data.error || "Something went wrong. Please try again.");

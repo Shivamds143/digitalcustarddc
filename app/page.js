@@ -57,27 +57,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── VISION & MISSION ── */}
-      <section>
-        <div className="wrap grid g2">
-          {[
-            [
-              "Our Vision",
-              "To be the most trusted digital partner for businesses worldwide, driving innovation and excellence in every campaign we create.",
-            ],
-            [
-              "Our Mission",
-              "To empower businesses with cutting-edge digital solutions that deliver real results, foster growth, and create lasting impact in the digital landscape.",
-            ],
-          ].map(([t, x]) => (
-            <div className="card" data-r key={t}>
-              <h3>{t}</h3>
-              <p>{x}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ── THREE PILLARS ── */}
       <section>
         <div className="wrap sp">
@@ -99,51 +78,6 @@ export default function Home() {
                 </Link>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── GROWTH PARTNER DARK SECTION ── */}
-      <section>
-        <div className="wrap">
-          <div className="dark sp" data-r>
-            <div>
-              <span className="eyebrow" style={{ color: "var(--gold-glow)" }}>Partnership</span>
-              <h2>We're Not Just an Agency, We're Your Growth Partner</h2>
-              <p className="mt">
-                At Digital Custard, we're not just marketers; we're storytellers, artists of digital landscapes, and architects of your brand's digital triumph. With a team of seasoned professionals dedicated to amplifying your brand's online presence, we turn visions into digital reality.
-              </p>
-              <Link href="/about" className="btn mt">
-                Learn More About Us <b>↗</b>
-              </Link>
-            </div>
-            <div className="partner-list">
-              {[
-                [
-                  "Expertise Meets Innovation",
-                  "We combine industry knowledge with cutting-edge strategies to deliver unparalleled results.",
-                ],
-                [
-                  "Tailored Solutions",
-                  "Each strategy is meticulously crafted to suit your brand's unique needs, ensuring optimal outcomes.",
-                ],
-                [
-                  "Proven Track Record",
-                  "Our success stories speak volumes about our commitment to driving your brand's growth.",
-                ],
-              ].map(([t, x], i) => (
-                <div key={t} style={{ marginBottom: 22 }}>
-                  <span>0{i + 1}</span>
-                  <h3>{t}</h3>
-                  <p>{x}</p>
-                </div>
-              ))}
-              <p>
-                <b style={{ color: "#fff" }}>
-                  Strategic Thinking · Creative Solutions · Real Results · 24/7 Support
-                </b>
-              </p>
-            </div>
           </div>
         </div>
       </section>

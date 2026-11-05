@@ -48,8 +48,8 @@ export default function About() {
               "At Digital Custard, we're more than a marketing agency. We're pioneers in navigating the digital landscape, empowering businesses to thrive in the ever-evolving online sphere.",
               "Over the years, we've helped startups find their voice, established brands reinvent themselves, and everything in between. Our approach combines creative intuition with rigorous data analysis to deliver campaigns that don't just look good — they perform.",
               "Today, we're proud to be partners with clients who trust us with their digital presence. But we're just getting started.",
-            ].map((p) => (
-              <p className="lead" style={{ marginBottom: 20 }} data-r key={p}>{p}</p>
+            ].map((p, idx) => (
+              <p className="lead" style={{ marginBottom: 20 }} data-r key={idx}>{p}</p>
             ))}
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function About() {
               <p className="mt">
                 At Digital Custard, we're not just marketers; we're storytellers, artists of digital landscapes, and architects of your brand's digital triumph. With a team of seasoned professionals dedicated to amplifying your brand's online presence, we turn visions into digital reality.
               </p>
-              <Link href="/contact" className="btn mt">Start a conversation ↗</Link>
+              <Link href="/contact" className="btn mt">Start a conversation <b>↗</b></Link>
             </div>
             <div className="partner-list">
               {[

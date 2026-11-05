@@ -1,44 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
-import GooeyNav from "./GooeyNav";
 import { nav, brand } from "@/lib/content";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
-  const gooeyItems = useMemo(() => [
+  const navLinks = useMemo(() => [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Services", href: "/services" },
-    { label: "Work", href: "/work" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" }
   ], []);
 
-  const activeIndex = useMemo(() => {
-    const idx = gooeyItems.findIndex((it) =>
-      it.href === "/" ? pathname === "/" : pathname.startsWith(it.href)
-    );
-    return idx >= 0 ? idx : 0;
-  }, [pathname, gooeyItems]);
-
   /* ── scroll progress bar + glass header ── */
   useEffect(() => {
     const bar = document.getElementById("bar");
-    const hd = document.getElementById("hd");
     const onScroll = () => {
       const h = document.documentElement;
       const progress = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
       if (bar) bar.style.transform = `scaleX(${progress})`;
-      const isScrolled = h.scrollTop > 20;
-      if (hd) hd.classList.toggle("glass", isScrolled);
-      setScrolled(isScrolled);
+      setScrolled(h.scrollTop > 20);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -71,96 +58,90 @@ export function Header() {
       {/* scroll progress bar */}
       <div id="bar" />
 
-      <header id="hd" className={`hd${scrolled ? " glass" : ""}`}>
+      <header id="hd" className={`hd hd-milky-glass${scrolled ? " scrolled" : ""}`}>
         <div className="wrap hd-in">
-          {/* logo */}
+          {/* Logo with high-contrast luxury styling */}
           <Link href="/" className="logo" aria-label="Digital Custard home">
-            <img src="/images/digital-custard-mark.png" alt="Digital Custard" />
-            <span>Digital<br /><em>Custard</em></span>
+            <img src="/images/dc-logo.png" alt="Digital Custard" />
+            <span className="logo-text">Digital <em>Custard</em></span>
           </Link>
 
-          {/* Desktop GooeyNav */}
-          <div className="desktop-gooey-nav">
-            <GooeyNav
-              items={gooeyItems}
-              initialActiveIndex={0}
-              activeIndex={activeIndex}
-              onChange={(_, item) => {
-                if (item.href && item.href !== pathname) router.push(item.href);
-              }}
-              theme="dark"
-              color="#F5F0E9"
-              activeTextColor="#3A281D"
-              colors={["#C18A4A", "#D4A369", "#E5B978", "#8C6239", "#A97845", "#F5F0E9"]}
-              size="md"
-              frame={true}
-              particleCount={15}
-              spread={56}
-              animationTime={600}
-              timeVariance={300}
-              gooeyness={0.5}
-              wobble={0.5}
-              hoverEffect={true}
-            />
-          </div>
-
-          {/* Mobile navigation drawer */}
-          <nav className={`mobile-nav${open ? " open" : ""}`} aria-label="Mobile navigation">
-            <div className="mobile-nav-header">
-              <span className="eyebrow" style={{ margin: 0 }}>Menu</span>
-              <button
-                className="mobile-close"
-                onClick={() => setOpen(false)}
-                aria-label="Close menu"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="mobile-nav-links">
-              {gooeyItems.map((item) => {
-                const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-                return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className={`mobile-nav-link${isActive ? " active" : ""}`}
-                    onClick={() => setOpen(false)}
-                  >
-                    <span>{item.label}</span>
-                    {isActive && <i className="active-dot" />}
-                  </Link>
-                );
-              })}
-            </div>
-            <div className="mobile-nav-footer">
-              <Link
-                href="/contact"
-                className="btn sm"
-                style={{ width: "100%", justifyContent: "center" }}
-                onClick={() => setOpen(false)}
-              >
-                Start Journey <b>↗</b>
-              </Link>
-            </div>
+          {/* Milky White Transparent Desktop Navigation */}
+          <nav className="desktop-main-nav" aria-label="Main navigation">
+            {navLinks.map((item) => {
+              const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`main-nav-link${isActive ? " is-active" : ""}`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <span className="nav-glow-indicator" />}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* header action button */}
-          <Link href="/contact" className="btn sm hide-m hd-cta">
-            Start Journey <b>↗</b>
-          </Link>
+          {/* Header Action Button */}
+          <div className="hd-actions">
+            <Link href="/contact" className="btn sm hide-m hd-cta">
+              Start Journey <b>↗</b>
+            </Link>
 
-          {/* hamburger */}
-          <button
-            className={`burger${open ? " x" : ""}`}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            onClick={() => setOpen(!open)}
-          >
-            <i /><i />
-          </button>
+            {/* Hamburger button for mobile */}
+            <button
+              className={`burger burger-milky${open ? " x" : ""}`}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen(!open)}
+            >
+              <i /><i />
+            </button>
+          </div>
         </div>
 
-        {/* mobile overlay backdrop */}
+        {/* Mobile navigation drawer in matching milky glass */}
+        <nav className={`mobile-nav milky-glass${open ? " open" : ""}`} aria-label="Mobile navigation">
+          <div className="mobile-nav-header">
+            <span className="eyebrow" style={{ margin: 0, color: "var(--camel-dark)" }}>Menu</span>
+            <button
+              className="mobile-close mobile-close-milky"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="mobile-nav-links">
+            {navLinks.map((item) => {
+              const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`mobile-nav-link milky-link${isActive ? " active" : ""}`}
+                  onClick={() => setOpen(false)}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <i className="active-dot" />}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mobile-nav-footer">
+            <Link
+              href="/contact"
+              className="btn sm"
+              style={{ width: "100%", justifyContent: "center" }}
+              onClick={() => setOpen(false)}
+            >
+              Start Journey <b>↗</b>
+            </Link>
+          </div>
+        </nav>
+
+        {/* Mobile overlay backdrop */}
         {open && (
           <div
             className="nav-backdrop"
@@ -180,8 +161,8 @@ export function Footer() {
         {/* brand */}
         <div>
           <div className="logo inv">
-            <img src="/images/digital-custard-mark.png" alt="Digital Custard" />
-            <span>Digital<br /><em>Custard</em></span>
+            <img src="/images/dc-logo.png" alt="Digital Custard" />
+            <span className="logo-text">Digital <em>Custard</em></span>
           </div>
           <p style={{ marginTop: 16, maxWidth: "34ch", color: "#d9cec5" }}>
             Transforming brands through innovative digital marketing strategies that deliver measurable results.
@@ -245,7 +226,7 @@ export function Footer() {
         {/* quick links */}
         <div>
           <h4>Quick Links</h4>
-          {nav.filter(n => n !== "Home").map((n) => (
+          {nav.filter(n => n !== "Home" && n !== "Work").map((n) => (
             <Link key={n} href={`/${n.toLowerCase()}`}>{n}</Link>
           ))}
         </div>
@@ -253,7 +234,7 @@ export function Footer() {
         {/* services */}
         <div>
           <h4>Services</h4>
-          {["AI Services", "Product Development", "Web Development", "Mobile App Development", "UI/UX Design", "Digital Marketing Services"].map((s) => (
+          {["AI Services", "IT Services", "Digital Marketing Services"].map((s) => (
             <Link key={s} href="/services">{s}</Link>
           ))}
         </div>
@@ -261,11 +242,27 @@ export function Footer() {
         {/* contact */}
         <div>
           <h4>Contact</h4>
-          <a href={`mailto:${brand.email}`}>{brand.email}</a>
+          <a
+            href={brand.gmailUrl || `mailto:${brand.email}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Send email via Gmail"
+          >
+            {brand.email}
+          </a>
           <a href={`tel:${brand.phone.replace(/ /g, "")}`}>{brand.phone}</a>
           <a href="https://wa.me/917020763979" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
           <span>{brand.hours}</span>
           <span>{brand.loc}</span>
+          <a
+            href={brand.mapUrl || "https://maps.google.com"}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open address in Google Maps"
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {brand.address}
+          </a>
         </div>
       </div>
 

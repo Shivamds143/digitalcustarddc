@@ -10,7 +10,8 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }) {
-  const article = getArticleBySlug(params.slug);
+  const slug = params?.slug;
+  const article = slug ? getArticleBySlug(slug) : null;
   if (!article) return { title: "Article Not Found | Digital Custard" };
 
   return {
@@ -20,7 +21,8 @@ export function generateMetadata({ params }) {
 }
 
 export default function ArticlePage({ params }) {
-  const article = getArticleBySlug(params.slug);
+  const slug = params?.slug;
+  const article = slug ? getArticleBySlug(slug) : null;
   if (!article) notFound();
 
   const related = blogArticles.filter((a) => a.slug !== article.slug);
@@ -47,10 +49,10 @@ export default function ArticlePage({ params }) {
           </p>
 
           <div className="article-author-card mt">
-            <div className="author-avatar">{article.author[0]}</div>
+            <div className="author-avatar">{article.author ? article.author[0] : "D"}</div>
             <div>
               <strong style={{ display: "block", color: "var(--ink)", fontSize: 15 }}>
-                {article.author}
+                {article.author || "Digital Custard Team"}
               </strong>
               <small style={{ color: "var(--mut)" }}>
                 {article.authorRole} · {article.date} · {article.readTime}

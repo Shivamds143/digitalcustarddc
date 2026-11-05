@@ -21,7 +21,13 @@ export default function Contact() {
             <h3 style={{ marginBottom: 4 }}>Contact Information</h3>
             <p>
               <strong style={{ color: "var(--ink)" }}>Email:</strong>{" "}
-              <a href={`mailto:${brand.email}`} style={{ color: "var(--camel-dark)" }}>
+              <a
+                href={brand.gmailUrl || `mailto:${brand.email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Send email via Gmail"
+                style={{ color: "var(--camel-dark)" }}
+              >
                 {brand.email}
               </a>
             </p>
@@ -49,6 +55,17 @@ export default function Contact() {
             <p>
               <strong style={{ color: "var(--ink)" }}>Location:</strong>{" "}
               {brand.loc}
+            </p>
+            <p>
+              <strong style={{ color: "var(--ink)" }}>Address:</strong>{" "}
+              <a
+                href={brand.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--camel-dark)" }}
+              >
+                {brand.address}
+              </a>
             </p>
           </div>
         </div>

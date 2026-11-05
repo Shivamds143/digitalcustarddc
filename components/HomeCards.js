@@ -1,19 +1,29 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { excellence, why, sectors } from "@/lib/content";
 
 /* ══════════════════════════════════════════════════
-   1. EXCELLENCE SECTION WITH ANIMATED INTERACTIVE CARDS
+   HELPER: MOUSE-TRACKING SPOTLIGHT EFFECT
+══════════════════════════════════════════════════ */
+function handleMouseMove(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+  e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+}
+
+/* ══════════════════════════════════════════════════
+   1. EXCELLENCE SECTION (SPOTLIGHT LUXURY CARDS)
 ══════════════════════════════════════════════════ */
 const excellenceDetails = [
   {
     title: "Data-Driven Approach",
-    desc: "Every decision backed by analytics and insights.",
+    desc: "Every strategic decision and campaign iteration backed by deep performance analytics and real-time insights.",
     badge: "Analytics First",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 20V10M12 20V4M6 20v-6" />
       </svg>
     ),
@@ -21,46 +31,44 @@ const excellenceDetails = [
   },
   {
     title: "Dedicated Team",
-    desc: "Expert professionals committed to your success.",
+    desc: "Experienced full-stack engineers, creatives, and growth strategists fully committed to your business success.",
     badge: "Specialist Squad",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    metric: "Dedicated Leads"
+    metric: "Senior Dedicated Leads"
   },
   {
     title: "Proven Results",
-    desc: "Track record of delivering measurable ROI.",
-    badge: "300%+ Avg Growth",
+    desc: "A consistent track record of driving qualified customer pipelines, reducing CAC, and delivering exponential ROI.",
+    badge: "High Growth",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" />
         <path d="m16 12-4-4-4 4M12 16V8" />
       </svg>
     ),
-    metric: "ROI Focused"
+    metric: "300%+ Avg ROI"
   },
   {
     title: "24/7 Support",
-    desc: "Round-the-clock assistance when you need it.",
-    badge: "Always Available",
+    desc: "Proactive communication, rapid issue resolution, and around-the-clock technical monitoring when you need it.",
+    badge: "Always On",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
       </svg>
     ),
-    metric: "Live Response"
+    metric: "Live Proactive Response"
   }
 ];
 
 export function ExcellenceSection() {
-  const [hoveredIdx, setHoveredIdx] = useState(null);
-
   return (
     <section className="excellence-section">
       <div className="wrap">
@@ -73,33 +81,29 @@ export function ExcellenceSection() {
         </div>
 
         <div className="excellence-cards-grid mt">
-          {excellenceDetails.map((item, i) => {
-            const isHovered = hoveredIdx === i;
-            return (
-              <div
-                key={item.title}
-                className={`excellence-card card${isHovered ? " is-hovered" : ""}`}
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                data-r
-              >
-                <div className="excellence-card-glow" />
-                <div className="excellence-top">
-                  <div className="excellence-icon-wrapper">
-                    {item.icon}
-                  </div>
-                  <span className="excellence-pill">{item.badge}</span>
+          {excellenceDetails.map((item, i) => (
+            <div
+              key={item.title}
+              className="excellence-card spotlight-card"
+              onMouseMove={handleMouseMove}
+              data-r
+            >
+              <div className="excellence-card-glow" />
+              <div className="excellence-top">
+                <div className="excellence-icon-wrapper">
+                  {item.icon}
                 </div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-                <div className="excellence-bottom">
-                  <span className="excellence-metric">
-                    <i className="pulse-dot" /> {item.metric}
-                  </span>
-                </div>
+                <span className="excellence-pill">{item.badge}</span>
               </div>
-            );
-          })}
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+              <div className="excellence-bottom">
+                <span className="excellence-metric">
+                  <i className="pulse-dot" /> {item.metric}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -107,56 +111,80 @@ export function ExcellenceSection() {
 }
 
 /* ══════════════════════════════════════════════════
-   2. WHY DIGITAL CUSTARD – SCROLLING STEP DECK
+   2. WHY DIGITAL CUSTARD – BENTO SPOTLIGHT GRID
+   (Replaces the horizontal scroll with a modern luxury bento grid)
 ══════════════════════════════════════════════════ */
 const whySteps = [
   {
     num: "01",
     tag: "Strategy",
     title: "Strategy First",
-    lead: "We start with your business goals, not just technology.",
-    text: "We understand your challenges, audience, and objectives before creating a strategy that fits your business."
+    desc: "We align digital solutions directly with your business goals, target audience, and high-intent market opportunities.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
+      </svg>
+    ),
+    feature: "Commercial Alignment"
   },
   {
     num: "02",
     tag: "Synergy",
     title: "Creative + Technology",
-    lead: "Ideas become more powerful when creativity meets technology.",
-    text: "We bring together creative thinking, modern technology, and digital expertise to build meaningful experiences."
+    desc: "Where bold, memorable storytelling meets full-stack engineering to build flawless customer journeys.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+      </svg>
+    ),
+    feature: "Full-Stack Synergy"
   },
   {
     num: "03",
     tag: "Precision",
     title: "Data-Driven Decisions",
-    lead: "Less guesswork. More measurable growth.",
-    text: "We use data and performance insights to optimize strategies, improve engagement, and drive better results."
+    desc: "Zero guesswork — every campaign, ad spend allocation, and UX touchpoint is guided by real user behavior analytics.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg>
+    ),
+    feature: "100% Attribution"
   },
   {
     num: "04",
     tag: "Custom",
     title: "Built Around You",
-    lead: "Your business is unique. Your solution should be too.",
-    text: "From strategy to execution, we create customized solutions aligned with your brand, industry, and goals."
+    desc: "Tailored strategies and digital architecture engineered specifically for your brand voice, industry compliance, and market edge.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+    feature: "Custom Architecture"
   },
   {
     num: "05",
     tag: "Scale",
     title: "Focused on Growth",
-    lead: "We don't just launch. We help you move forward.",
-    text: "Our work is designed to create lasting digital impact, improve performance, and support sustainable business growth."
+    desc: "We don't just launch and leave. We continuously test, optimize, and scale campaigns to drive compounding revenue.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+        <polyline points="17 6 23 6 23 12" />
+      </svg>
+    ),
+    feature: "Continuous Scaling"
   }
 ];
 
 export function WhySection() {
-  const scrollRef = useRef(null);
-
-  const scrollLeft = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: -340, behavior: "smooth" });
-  };
-  const scrollRight = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: 340, behavior: "smooth" });
-  };
-
   return (
     <section className="why-section">
       <div className="wrap">
@@ -165,40 +193,46 @@ export function WhySection() {
             <p className="eyebrow">Why Digital Custard?</p>
             <h2>More Than Digital. We Build What Moves Your Business Forward.</h2>
             <p className="lead mt" style={{ marginTop: 14 }}>
-              At Digital Custard, we combine strategy, creativity, technology, and data to create digital solutions that deliver real business impact.
+              Clear strategy, creative innovation, and measurable performance — engineered for your growth.
             </p>
-          </div>
-
-          <div className="why-scroll-controls hide-m">
-            <button onClick={scrollLeft} aria-label="Scroll left" className="scroll-btn">
-              ←
-            </button>
-            <button onClick={scrollRight} aria-label="Scroll right" className="scroll-btn">
-              →
-            </button>
           </div>
         </div>
 
-        {/* Horizontal scroll track with smooth snap effect */}
-        <div className="why-scroll-container mt" ref={scrollRef}>
-          {whySteps.map((step) => (
-            <div key={step.title} className="card why-step-card" data-r>
-              <div className="why-step-watermark">{step.num}</div>
-              <div className="why-step-header">
-                <span className="why-step-pill">{step.tag}</span>
-                <span className="why-step-num">Step {step.num}</span>
+        {/* Bento-style Spotlight Card Grid (No horizontal clipping, fully responsive) */}
+        <div className="why-bento-grid mt">
+          {whySteps.map((step, idx) => (
+            <div
+              key={step.title}
+              className={`why-bento-card spotlight-card why-card-${idx + 1}`}
+              onMouseMove={handleMouseMove}
+              data-r
+            >
+              <div className="why-card-top">
+                <div className="why-icon-badge">
+                  {step.icon}
+                </div>
+                <div className="why-badge-group">
+                  <span className="why-step-pill">{step.tag}</span>
+                  <span className="why-step-num">{step.num}</span>
+                </div>
               </div>
-              <h3 className="why-step-title">{step.title}</h3>
-              <p className="why-step-lead">
-                <strong>{step.lead}</strong>
-              </p>
-              <p className="why-step-body">{step.text}</p>
-              <div className="why-step-line" />
+
+              <div className="why-card-content">
+                <h3 className="why-step-title">{step.title}</h3>
+                <p className="why-step-body">{step.desc}</p>
+              </div>
+
+              <div className="why-card-footer">
+                <span className="why-feature-tag">
+                  <i className="feature-glow-dot" /> {step.feature}
+                </span>
+                <span className="why-card-arrow">↗</span>
+              </div>
             </div>
           ))}
         </div>
 
-        <div className="mt" style={{ marginTop: 32 }}>
+        <div className="why-bottom-cta mt" style={{ marginTop: 44, textAlign: "center" }}>
           <Link href="/contact" className="btn">
             Talk to our team <b>↗</b>
           </Link>
@@ -217,35 +251,35 @@ const sectorDetails = [
     tag: "Patient Trust & Portals",
     desc: "We help healthcare businesses strengthen their digital presence, connect with patients, and build trusted brands through strategic digital solutions and engaging experiences.",
     icon: "🩺",
-    color: "#ba8346"
+    color: "#D49520"
   },
   {
     title: "Banking & Finance",
     tag: "Fintech & Compliance",
     desc: "We empower financial businesses with data-driven digital strategies that build trust, improve customer engagement, and create seamless digital experiences.",
     icon: "🏦",
-    color: "#d99b38"
+    color: "#E5A824"
   },
   {
-    title: "Manufacturing",
+    title: "Industry & Manufacturing",
     tag: "B2B Automation & Scale",
     desc: "We help manufacturing businesses modernize their digital presence, showcase their capabilities, and connect with customers through effective digital strategies.",
     icon: "⚙️",
-    color: "#c29462"
+    color: "#C88A1A"
   },
   {
     title: "Media & Entertainment",
     tag: "Viral Audience Reach",
     desc: "We help media and entertainment brands capture attention, engage audiences, and grow their digital presence through creative content and performance-driven strategies.",
     icon: "🎬",
-    color: "#a87334"
+    color: "#B57512"
   },
   {
-    title: "Supply Chain",
+    title: "Logistic & Supply Chain",
     tag: "Logistics Intelligence",
     desc: "We support supply chain businesses in communicating their value, strengthening their digital presence, and reaching the right audiences through focused digital solutions.",
     icon: "📦",
-    color: "#c48d4c"
+    color: "#DE9F26"
   }
 ];
 
@@ -281,9 +315,9 @@ export function IndustriesSection() {
                 <h3>{sec.title}</h3>
                 <p>{sec.desc}</p>
                 <div className="industry-card-footer">
-                  <span className="industry-cta">
+                  <Link href="/contact" className="industry-cta">
                     Custom Solutions <b>↗</b>
-                  </span>
+                  </Link>
                 </div>
               </div>
             );
