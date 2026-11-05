@@ -389,15 +389,17 @@ section { padding: clamp(100px, 12vh, 140px) 0; }
 .mobile-nav {
   position: fixed;
   top: 0; right: 0; bottom: 0;
-  width: min(320px, 85vw);
+  width: min(320px, 86vw);
   background: var(--bg-card);
   box-shadow: -10px 0 35px rgba(28, 21, 16, 0.18);
-  padding: 28px 24px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   transform: translateX(105%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 55;
+  z-index: 9999;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .mobile-nav.open {
   transform: translateX(0);
@@ -482,7 +484,7 @@ section { padding: clamp(100px, 12vh, 140px) 0; }
   background: rgba(28, 21, 16, 0.35);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 52;
+  z-index: 9998;
 }
 
 @media(max-width: 960px) {
@@ -1932,4 +1934,92 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] {
 @media(prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
   [data-r] { opacity: 1 !important; transform: none !important; }
+}
+
+
+/* ===================================================
+   MOBILE VIEW USER EXPERIENCE ENHANCEMENTS
+   (Strictly scoped to <= 768px, Desktop 100% untouched)
+=================================================== */
+@media (max-width: 768px) {
+  :root {
+    --nav-h: 68px;
+  }
+  
+  .hd-in {
+    gap: 14px;
+  }
+  
+  .logo img {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .logo-text {
+    font-size: 20px !important;
+  }
+  
+  .burger {
+    width: 40px;
+    height: 40px;
+  }
+
+  .wrap {
+    padding: 0 18px !important;
+  }
+
+  section {
+    padding: 65px 0 !important;
+  }
+
+  .page-h {
+    padding-top: 100px !important;
+    padding-bottom: 50px !important;
+  }
+
+  .hero {
+    padding: 95px 0 50px !important;
+  }
+
+  h1 {
+    font-size: clamp(30px, 8.5vw, 42px) !important;
+    line-height: 1.16 !important;
+  }
+
+  h2 {
+    font-size: clamp(24px, 6.8vw, 32px) !important;
+    line-height: 1.22 !important;
+  }
+
+  .lead {
+    font-size: 15.5px !important;
+    line-height: 1.6 !important;
+  }
+
+  .row {
+    gap: 12px;
+  }
+
+  .row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form {
+    padding: 24px 18px !important;
+  }
+
+  .ft-g {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+
+  .hero-monogram-wrapper {
+    max-width: 100% !important;
+  }
+  
+  .inner-visual {
+    margin-top: 24px;
+    max-width: 100% !important;
+  }
 }
