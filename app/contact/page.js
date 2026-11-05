@@ -1,10 +1,10 @@
+import { getSeoForPage } from "@/lib/seoManager";
 import ContactForm from "@/components/ContactForm";
 import { brand } from "@/lib/content";
 
-export const metadata = {
-  title: "Contact | Digital Custard",
-  description: "Ready to transform your digital presence? We'd love to hear about your project and explore how we can help."
-};
+export async function generateMetadata() {
+  return await getSeoForPage("contact");
+}
 
 export default function Contact() {
   return (

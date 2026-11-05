@@ -1,10 +1,10 @@
+import { getSeoForPage } from "@/lib/seoManager";
 import Cta from "@/components/Cta";
 import Link from "next/link";
 import { values } from "@/lib/content";
-export const metadata = {
-  title: "About | Digital Custard",
-  description: "We're pioneers in navigating the digital landscape, empowering businesses to thrive in the ever-evolving online sphere.",
-};
+export async function generateMetadata() {
+  return await getSeoForPage("about");
+}
 
 export default function About() {
   return (

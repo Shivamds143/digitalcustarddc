@@ -3,14 +3,19 @@ import { notFound } from "next/navigation";
 import Cta from "@/components/Cta";
 import FlipCard from "@/components/FlipCard";
 import { servicePanels } from "@/lib/servicesContent";
+import { getSeoForPage } from "@/lib/seoManager";
 
 /* ── Static params for build-time generation ── */
 export function generateStaticParams() {
   return servicePanels.map((p) => ({ slug: p.id }));
 }
 
-/* ── Dynamic metadata per service ── */
-export function generateMetadata({ params }) {
+/* ── Dynamic metadata per service managed via Admin SEO ── */
+export async function generateMetadata({ params }) {
+  const seoKey = `services_${params.slug}`;
+  const customSeo = await getSeoForPage(seoKey);
+  if (customSeo && customSeo.title) return customSeo;
+
   const panel = servicePanels.find((p) => p.id === params.slug);
   if (!panel) return {};
   const fullTitle = `${panel.title} ${panel.titleEm}`.replace(/&/g, "&");

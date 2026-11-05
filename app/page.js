@@ -1,12 +1,12 @@
+import { getSeoForPage } from "@/lib/seoManager";
 import Link from "next/link";
 import Cta from "@/components/Cta";
 import { stats, pillars, quotes } from "@/lib/content";
 import { ExcellenceSection, WhySection, IndustriesSection } from "@/components/HomeCards";
 
-export const metadata = {
-  title: "Digital Custard | AI, IT and Digital Marketing",
-  description: "Transforming brands through innovative digital marketing strategies that deliver measurable results.",
-};
+export async function generateMetadata() {
+  return await getSeoForPage("home");
+}
 
 export default function Home() {
   return (

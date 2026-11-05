@@ -1,3 +1,4 @@
+import { getSeoForPage } from "@/lib/seoManager";
 import Cta from "@/components/Cta";
 import Link from "next/link";
 import ServiceStackSection from "@/components/ServiceStackSection";
@@ -8,7 +9,9 @@ import {
   servicesCtaContent,
 } from "@/lib/servicesContent";
 
-export const metadata = servicesMetadata;
+export async function generateMetadata() {
+  return await getSeoForPage("services");
+}
 
 export default function Services() {
   const { eyebrow, title, titleEm, lead, primaryCta, secondaryCta, visual } =
