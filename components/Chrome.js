@@ -100,56 +100,56 @@ export function Header() {
             </button>
           </div>
         </div>
-
-        {/* Mobile navigation drawer in matching milky glass */}
-        <nav className={`mobile-nav milky-glass${open ? " open" : ""}`} aria-label="Mobile navigation">
-          <div className="mobile-nav-header">
-            <span className="eyebrow" style={{ margin: 0, color: "var(--camel-dark)" }}>Menu</span>
-            <button
-              className="mobile-close mobile-close-milky"
-              onClick={() => setOpen(false)}
-              aria-label="Close menu"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="mobile-nav-links">
-            {navLinks.map((item) => {
-              const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`mobile-nav-link milky-link${isActive ? " active" : ""}`}
-                  onClick={() => setOpen(false)}
-                >
-                  <span>{item.label}</span>
-                  {isActive && <i className="active-dot" />}
-                </Link>
-              );
-            })}
-          </div>
-          <div className="mobile-nav-footer">
-            <Link
-              href="/contact"
-              className="btn sm"
-              style={{ width: "100%", justifyContent: "center" }}
-              onClick={() => setOpen(false)}
-            >
-              Start Journey <b>↗</b>
-            </Link>
-          </div>
-        </nav>
-
-        {/* Mobile overlay backdrop */}
-        {open && (
-          <div
-            className="nav-backdrop"
-            onClick={() => setOpen(false)}
-            aria-hidden="true"
-          />
-        )}
       </header>
+
+      {/* Mobile navigation drawer rendered outside header to avoid stacking context & clip */}
+      <nav className={`mobile-nav milky-glass${open ? " open" : ""}`} aria-label="Mobile navigation">
+        <div className="mobile-nav-header">
+          <span className="eyebrow" style={{ margin: 0, color: "var(--camel-dark)" }}>Menu</span>
+          <button
+            className="mobile-close mobile-close-milky"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="mobile-nav-links">
+          {navLinks.map((item) => {
+            const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`mobile-nav-link milky-link${isActive ? " active" : ""}`}
+                onClick={() => setOpen(false)}
+              >
+                <span>{item.label}</span>
+                {isActive && <i className="active-dot" />}
+              </Link>
+            );
+          })}
+        </div>
+        <div className="mobile-nav-footer">
+          <Link
+            href="/contact"
+            className="btn sm"
+            style={{ width: "100%", justifyContent: "center" }}
+            onClick={() => setOpen(false)}
+          >
+            Start Journey <b>↗</b>
+          </Link>
+        </div>
+      </nav>
+
+      {/* Mobile overlay backdrop */}
+      {open && (
+        <div
+          className="nav-backdrop"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 }

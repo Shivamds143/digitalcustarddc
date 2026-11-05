@@ -271,35 +271,6 @@ section { padding: clamp(100px, 12vh, 140px) 0; }
   background: var(--ink);
 }
 
-/* Mobile Drawer in Milky Glass */
-.mobile-nav.milky-glass {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border-left: 1px solid rgba(193, 138, 74, 0.18);
-  box-shadow: -15px 0 45px rgba(45, 30, 20, 0.12);
-}
-
-.mobile-close-milky {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid rgba(193, 138, 74, 0.25) !important;
-  color: var(--ink) !important;
-}
-.mobile-close-milky:hover {
-  background: #FFFFFF !important;
-  border-color: var(--camel) !important;
-}
-
-.mobile-nav-link.milky-link {
-  color: var(--ink);
-}
-.mobile-nav-link.milky-link:hover,
-.mobile-nav-link.milky-link.active {
-  background: rgba(193, 138, 74, 0.12);
-  color: var(--camel-dark);
-  border: 1px solid rgba(193, 138, 74, 0.25);
-}
-
 /* logo */
 .logo {
   display: flex;
@@ -385,72 +356,125 @@ section { padding: clamp(100px, 12vh, 140px) 0; }
 .logo.inv .logo-text { color: #fff; -webkit-text-fill-color: #fff; }
 .logo.inv .logo-text em { color: #F5CC6D; -webkit-text-fill-color: #F5CC6D; }
 
-/* Mobile Nav Drawer */
+/* ═══════════════════════════════════════════
+   PREMIUM MOBILE NAVIGATION DRAWER
+   (Off-canvas, true fullscreen height, luxury aesthetic)
+════════════════════════════════════════════ */
 .mobile-nav {
-  position: fixed;
-  top: 0; right: 0; bottom: 0;
-  width: min(320px, 86vw);
-  background: var(--bg-card);
-  box-shadow: -10px 0 35px rgba(28, 21, 16, 0.18);
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(105%);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 9999;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: min(340px, 86vw) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  background: #FFFFFF !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF7F2 100%) !important;
+  box-shadow: -15px 0 50px rgba(45, 30, 20, 0.22) !important;
+  border-left: 1px solid rgba(193, 138, 74, 0.28) !important;
+  padding: 24px 22px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transform: translateX(110%) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  z-index: 100000 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-sizing: border-box !important;
 }
+
 .mobile-nav.open {
-  transform: translateX(0);
+  transform: translateX(0) !important;
 }
+
 .mobile-nav-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--line);
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-bottom: 18px !important;
+  border-bottom: 1px solid rgba(193, 138, 74, 0.18) !important;
 }
-.mobile-close {
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  width: 34px; height: 34px;
-  cursor: pointer;
-  color: var(--ink);
-  font-size: 16px;
-  display: grid;
-  place-items: center;
+
+.mobile-close,
+.mobile-close-milky {
+  background: rgba(193, 138, 74, 0.1) !important;
+  border: 1px solid rgba(193, 138, 74, 0.25) !important;
+  border-radius: 10px !important;
+  width: 38px !important;
+  height: 38px !important;
+  cursor: pointer !important;
+  color: var(--ink) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  display: grid !important;
+  place-items: center !important;
+  transition: all 0.2s ease !important;
 }
+
+.mobile-close:hover,
+.mobile-close-milky:hover {
+  background: rgba(193, 138, 74, 0.2) !important;
+  color: var(--camel-dark) !important;
+  transform: rotate(90deg) !important;
+}
+
 .mobile-nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 24px;
-  flex: 1;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  margin-top: 24px !important;
+  flex: 1 !important;
 }
-.mobile-nav-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 13px 16px;
-  border-radius: 12px;
-  font: 600 15px var(--sans);
-  color: var(--ink);
-  transition: background .2s ease;
+
+.mobile-nav-link,
+.mobile-nav-link.milky-link {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 14px 18px !important;
+  border-radius: 12px !important;
+  font-family: var(--sans, sans-serif) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(193, 138, 74, 0.12) !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
 }
-.mobile-nav-link:hover, .mobile-nav-link.active {
-  background: var(--tint);
-  color: var(--camel-dark);
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active,
+.mobile-nav-link.milky-link:hover,
+.mobile-nav-link.milky-link.active {
+  background: rgba(193, 138, 74, 0.14) !important;
+  color: var(--camel-dark) !important;
+  border-color: rgba(193, 138, 74, 0.35) !important;
+  transform: translateX(3px) !important;
 }
+
 .active-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--camel);
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: var(--camel) !important;
+  box-shadow: 0 0 6px rgba(193, 138, 74, 0.6) !important;
 }
+
 .mobile-nav-footer {
-  margin-top: auto;
-  padding-top: 20px;
+  margin-top: auto !important;
+  padding-top: 20px !important;
+  border-top: 1px solid rgba(193, 138, 74, 0.16) !important;
+}
+
+.nav-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(24, 16, 11, 0.55) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  z-index: 99999 !important;
+  transition: opacity 0.3s ease !important;
 }
 
 /* Hamburger button */
