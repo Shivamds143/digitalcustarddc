@@ -4,6 +4,8 @@ import Cta from "@/components/Cta";
 import { stats, pillars, quotes } from "@/lib/content";
 import { ExcellenceSection, WhySection, IndustriesSection } from "@/components/HomeCards";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   return await getSeoForPage("home");
 }

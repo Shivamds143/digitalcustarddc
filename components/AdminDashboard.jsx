@@ -587,21 +587,47 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
                 {seoSaveMsg && <span className="seo-status-toast">{seoSaveMsg}</span>}
               </div>
 
-              {/* Google Search Live Simulator Preview */}
-              <div className="seo-google-preview-box">
-                <span className="preview-label">Google Search Result Preview:</span>
-                <div className="google-preview-inner">
-                  <div className="google-url-row">
-                    <img src="/images/dc-logo.png" alt="Favicon" className="google-favicon" />
-                    <span className="google-site-name">Digital Custard</span>
-                    <span className="google-url-text">https://digitalcustard.in{seoData[selectedSeoKey]?.path}</span>
+              {/* SEO & Social Card Live Simulators */}
+              <div className="seo-previews-container">
+                <div className="seo-google-preview-box">
+                  <span className="preview-label">Google Search Result Preview:</span>
+                  <div className="google-preview-inner">
+                    <div className="google-url-row">
+                      <img src="/images/dc-logo.png" alt="Favicon" className="google-favicon" />
+                      <span className="google-site-name">Digital Custard</span>
+                      <span className="google-url-text">https://digitalcustarddc.vercel.app{seoData[selectedSeoKey]?.path}</span>
+                    </div>
+                    <h4 className="google-title-preview">
+                      {seoForm.title || "Page Title | Digital Custard"}
+                    </h4>
+                    <p className="google-desc-preview">
+                      {seoForm.description || "Add a meta description to see how this page will display in Google search results."}
+                    </p>
                   </div>
-                  <h4 className="google-title-preview">
-                    {seoForm.title || "Page Title | Digital Custard"}
-                  </h4>
-                  <p className="google-desc-preview">
-                    {seoForm.description || "Add a meta description to see how this page will display in Google search results."}
-                  </p>
+                </div>
+
+                {/* Social Media OpenGraph Live Preview */}
+                <div className="seo-og-preview-box">
+                  <span className="preview-label">Social Share Preview (WhatsApp / LinkedIn / Twitter / Facebook):</span>
+                  <div className="og-card-preview-inner">
+                    <div className="og-preview-img-wrap">
+                      <img
+                        src={seoForm.ogImage || "/images/dc-hero-monogram.jpg"}
+                        alt="OpenGraph Preview Banner"
+                        className="og-preview-img"
+                        onError={(e) => { e.currentTarget.src = "/images/dc-hero-monogram.jpg"; }}
+                      />
+                    </div>
+                    <div className="og-preview-meta">
+                      <span className="og-preview-domain">DIGITALCUSTARDDC.VERCEL.APP</span>
+                      <h4 className="og-preview-title">
+                        {seoForm.ogTitle || seoForm.title || "Digital Custard"}
+                      </h4>
+                      <p className="og-preview-desc">
+                        {seoForm.ogDescription || seoForm.description || "Transforming brands through innovative digital marketing strategies."}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 

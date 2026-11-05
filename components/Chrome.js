@@ -96,24 +96,42 @@ export function Header() {
               aria-expanded={open}
               onClick={() => setOpen(!open)}
             >
-              <i /><i />
+              <i /><i /><i />
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile navigation drawer rendered outside header to avoid stacking context & clip */}
-      <nav className={`mobile-nav milky-glass${open ? " open" : ""}`} aria-label="Mobile navigation">
+      {/* Mobile navigation drawer — truly off-canvas, no clip issues */}
+      {open && (
+        <div
+          className="nav-backdrop"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <nav
+        className={`mobile-nav${open ? " open" : ""}`}
+        aria-label="Mobile navigation"
+        aria-hidden={!open}
+        style={{ visibility: open ? "visible" : "hidden" }}
+      >
+        {/* Drawer header */}
         <div className="mobile-nav-header">
-          <span className="eyebrow" style={{ margin: 0, color: "var(--camel-dark)" }}>Menu</span>
+          <div className="mobile-nav-logo">
+            <span className="mobile-nav-brand">Digital <em>Custard</em></span>
+          </div>
           <button
-            className="mobile-close mobile-close-milky"
+            className="mobile-close"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
           >
             ✕
           </button>
         </div>
+
+        {/* Nav links */}
         <div className="mobile-nav-links">
           {navLinks.map((item) => {
             const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -121,7 +139,7 @@ export function Header() {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`mobile-nav-link milky-link${isActive ? " active" : ""}`}
+                className={`mobile-nav-link${isActive ? " active" : ""}`}
                 onClick={() => setOpen(false)}
               >
                 <span>{item.label}</span>
@@ -130,26 +148,20 @@ export function Header() {
             );
           })}
         </div>
+
+        {/* Footer CTA */}
         <div className="mobile-nav-footer">
           <Link
             href="/contact"
-            className="btn sm"
-            style={{ width: "100%", justifyContent: "center" }}
+            className="btn"
+            style={{ width: "100%", justifyContent: "center", borderRadius: "12px" }}
             onClick={() => setOpen(false)}
           >
-            Start Journey <b>↗</b>
+            Start Your Journey <b>↗</b>
           </Link>
+          <p className="mobile-nav-tagline">Transforming brands through digital excellence.</p>
         </div>
       </nav>
-
-      {/* Mobile overlay backdrop */}
-      {open && (
-        <div
-          className="nav-backdrop"
-          onClick={() => setOpen(false)}
-          aria-hidden="true"
-        />
-      )}
     </>
   );
 }

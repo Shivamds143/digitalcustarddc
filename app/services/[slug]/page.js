@@ -5,6 +5,8 @@ import FlipCard from "@/components/FlipCard";
 import { servicePanels } from "@/lib/servicesContent";
 import { getSeoForPage } from "@/lib/seoManager";
 
+export const revalidate = 0;
+
 /* ── Static params for build-time generation ── */
 export function generateStaticParams() {
   return servicePanels.map((p) => ({ slug: p.id }));

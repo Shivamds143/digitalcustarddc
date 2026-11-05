@@ -2,6 +2,8 @@ import { getSeoForPage } from "@/lib/seoManager";
 import ContactForm from "@/components/ContactForm";
 import { brand } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   return await getSeoForPage("contact");
 }

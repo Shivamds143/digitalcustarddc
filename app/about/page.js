@@ -2,6 +2,8 @@ import { getSeoForPage } from "@/lib/seoManager";
 import Cta from "@/components/Cta";
 import Link from "next/link";
 import { values } from "@/lib/content";
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   return await getSeoForPage("about");
 }

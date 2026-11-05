@@ -9,6 +9,8 @@ import {
   servicesCtaContent,
 } from "@/lib/servicesContent";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   return await getSeoForPage("services");
 }
