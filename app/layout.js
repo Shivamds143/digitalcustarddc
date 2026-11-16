@@ -1,4 +1,4 @@
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Montserrat } from "next/font/google";
 import { Header, Footer } from "@/components/Chrome";
 import DomGuard from "@/components/DomGuard";
 import "./globals.css";
@@ -14,6 +14,13 @@ const serif = Playfair_Display({
 const sans = Inter({
   subsets: ["latin"],
   variable: "--sans",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["700", "800", "900"],
   display: "swap",
 });
 
@@ -90,7 +97,7 @@ export const metadata = {
 
 export default function Root({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${serif.variable} ${sans.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${serif.variable} ${sans.variable} ${montserrat.variable}`}>
       <head>
         <DomGuard />
       </head>
