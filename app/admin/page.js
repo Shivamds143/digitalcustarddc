@@ -38,6 +38,7 @@ export default async function Admin() {
     name: m.name || "",
     email: m.email || "",
     phone: m.phone || "",
+    subject: m.subject || "",
     message: m.message || "",
     createdAt: m.createdAt || new Date().toISOString(),
     source: m.source || "website",

@@ -78,6 +78,7 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
         (m.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (m.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (m.phone || "").includes(searchTerm) ||
+        (m.subject || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (m.message || "").toLowerCase().includes(searchTerm.toLowerCase());
 
       if (!matchSearch) return false;
@@ -483,6 +484,15 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
                               WhatsApp ↗
                             </a>
                           </div>
+                        </div>
+                      ) : null}
+
+                      {selectedMessage.subject ? (
+                        <div className="contact-tile">
+                          <span className="tile-title">Subject</span>
+                          <span style={{ fontWeight: 600, color: "var(--ink, #211A17)", display: "inline-block", marginTop: 4 }}>
+                            {selectedMessage.subject}
+                          </span>
                         </div>
                       ) : null}
                     </div>

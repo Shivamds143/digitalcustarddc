@@ -18,12 +18,13 @@ export async function GET() {
   }
 
   // Format into CSV
-  const headers = ["ID", "Name", "Email", "Phone", "Message", "Created At"];
+  const headers = ["ID", "Name", "Email", "Phone", "Subject", "Message", "Created At"];
   const rows = list.map((m) => [
     `"${(m._id?.toString() || "").replace(/"/g, '""')}"`,
     `"${(m.name || "").replace(/"/g, '""')}"`,
     `"${(m.email || "").replace(/"/g, '""')}"`,
     `"${(m.phone || "").replace(/"/g, '""')}"`,
+    `"${(m.subject || "").replace(/"/g, '""')}"`,
     `"${(m.message || "").replace(/"/g, '""').replace(/\n/g, " ")}"`,
     `"${(m.createdAt || "").replace(/"/g, '""')}"`,
   ]);

@@ -2,14 +2,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const INIT = { name: "", email: "", phone: "", message: "" };
+const INIT = { name: "", email: "", phone: "", subject: "", message: "", hp: "" };
 
 export default function ContactForm() {
   const router = useRouter();
-  const [fields, setFields]   = useState(INIT);
-  const [errors, setErrors]   = useState({});
-  const [status, setStatus]   = useState("idle"); // idle | busy | ok | err
-  const [errMsg, setErrMsg]   = useState("");
+  const [fields, setFields] = useState(INIT);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle"); // idle | busy | ok | err
+  const [errMsg, setErrMsg] = useState("");
 
   function onChange(e) {
     const { name, value } = e.target;
@@ -20,16 +20,28 @@ export default function ContactForm() {
 
   function validate() {
     const e = {};
-    if (!fields.name.trim())                        e.name    = "Name is required.";
-    if (!/^\S+@\S+\.\S+$/.test(fields.email.trim())) e.email = "Enter a valid email address.";
-    if (!fields.message.trim())                     e.message = "Please enter your message.";
+    if (!fields.name.trim() || fields.name.trim().length < 2) {
+      e.name = "Please enter your full name (at least 2 characters).";
+    }
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(fields.email.trim())) {
+      e.email = "Enter a valid email address.";
+    }
+    if (fields.phone.trim() && !/^[+0-9\s\-()]{6,30}$/.test(fields.phone.trim())) {
+      e.phone = "Enter a valid phone number (or leave blank).";
+    }
+    if (!fields.message.trim() || fields.message.trim().length < 10) {
+      e.message = "Please enter your message (at least 10 characters).";
+    }
     return e;
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
 
     setStatus("busy");
     setErrMsg("");
@@ -73,6 +85,20 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="card form" noValidate>
       <h3>Send Us a Message</h3>
 
+      {/* Hidden honeypot field for bot/spam protection */}
+      <div style={{ display: "none" }} aria-hidden="true">
+        <label htmlFor="form-hp-field">Leave this empty</label>
+        <input
+          id="form-hp-field"
+          type="text"
+          name="hp"
+          value={fields.hp}
+          onChange={onChange}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <label>
         Name <span className="req">*</span>
         <input
@@ -109,6 +135,20 @@ export default function ContactForm() {
           onChange={onChange}
           placeholder="+91 70207 63979"
           autoComplete="tel"
+          aria-invalid={!!errors.phone}
+        />
+        {errors.phone && <span className="field-err">{errors.phone}</span>}
+      </label>
+
+      <label>
+        Subject <span className="opt">(optional)</span>
+        <input
+          name="subject"
+          type="text"
+          value={fields.subject}
+          onChange={onChange}
+          placeholder="e.g. Website Redesign / AI Automation Inquiry"
+          autoComplete="off"
         />
       </label>
 
