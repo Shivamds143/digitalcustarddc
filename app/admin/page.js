@@ -1,5 +1,6 @@
 import { getDatabase, getLocalMessages, checkMongoStatus } from "@/lib/mongodb";
 import { getAllSeoSettings } from "@/lib/seoManager";
+import { getAllLegalContent } from "@/lib/legalContent";
 import AdminDashboard from "@/components/AdminDashboard";
 
 export const dynamic = "force-dynamic";
@@ -8,6 +9,7 @@ export const metadata = { title: "Admin Portal | Digital Custard", robots: "noin
 export default async function Admin() {
   const mongoStatus = await checkMongoStatus();
   const initialSeoData = await getAllSeoSettings();
+  const initialLegalData = await getAllLegalContent();
 
   let list = [];
   if (mongoStatus.connected) {
@@ -49,6 +51,7 @@ export default async function Admin() {
       initialMessages={serialized}
       mongoStatus={mongoStatus}
       initialSeoData={initialSeoData}
+      initialLegalData={initialLegalData}
     />
   );
 }

@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import "./AdminDashboard.css";
 
-export default function AdminDashboard({ initialMessages, mongoStatus, initialSeoData }) {
+export default function AdminDashboard({ initialMessages, mongoStatus, initialSeoData, initialLegalData }) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("inquiries"); // 'inquiries' | 'seo'
+  const [activeTab, setActiveTab] = useState("inquiries"); // 'inquiries' | 'seo' | 'legal'
 
   // ── INQUIRIES STATE ──
   const [messages, setMessages] = useState(initialMessages);
@@ -25,6 +25,17 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
   const [seoForm, setSeoForm] = useState(initialSeoData?.home || {});
   const [savingSeo, setSavingSeo] = useState(false);
   const [seoSaveMsg, setSeoSaveMsg] = useState("");
+
+  // ── LEGAL PAGES STATE ──
+  const [legalData, setLegalData] = useState(initialLegalData || {});
+  const [selectedLegalKey, setSelectedLegalKey] = useState("privacy"); // 'privacy' | 'terms'
+  const [legalForm, setLegalForm] = useState(
+    initialLegalData?.privacy
+      ? { ...initialLegalData.privacy }
+      : { pageName: "Privacy Policy", lastUpdated: "", eyebrow: "Legal & Compliance", heading: "Privacy Policy", leadText: "", sections: [] }
+  );
+  const [savingLegal, setSavingLegal] = useState(false);
+  const [legalSaveMsg, setLegalSaveMsg] = useState("");
 
   // Switch selected SEO page
   function selectSeoPage(key) {
@@ -67,6 +78,88 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
     } finally {
       setSavingSeo(false);
       setTimeout(() => setSeoSaveMsg(""), 4000);
+    }
+  }
+
+  // ── LEGAL HELPERS ──────────────────────────────────────────────────────────
+
+  function selectLegalPage(key) {
+    setSelectedLegalKey(key);
+    setLegalForm(legalData[key] ? { ...legalData[key] } : {});
+    setLegalSaveMsg("");
+  }
+
+  function handleLegalInputChange(field, val) {
+    setLegalForm((prev) => ({ ...prev, [field]: val }));
+  }
+
+  function handleSectionChange(idx, field, val) {
+    setLegalForm((prev) => {
+      const sections = [...(prev.sections || [])];
+      sections[idx] = { ...sections[idx], [field]: val };
+      return { ...prev, sections };
+    });
+  }
+
+  function addSection() {
+    setLegalForm((prev) => ({
+      ...prev,
+      sections: [...(prev.sections || []), { title: "", content: "" }],
+    }));
+  }
+
+  function removeSection(idx) {
+    setLegalForm((prev) => {
+      const sections = [...(prev.sections || [])];
+      sections.splice(idx, 1);
+      return { ...prev, sections };
+    });
+  }
+
+  function moveSectionUp(idx) {
+    if (idx === 0) return;
+    setLegalForm((prev) => {
+      const sections = [...(prev.sections || [])];
+      [sections[idx - 1], sections[idx]] = [sections[idx], sections[idx - 1]];
+      return { ...prev, sections };
+    });
+  }
+
+  function moveSectionDown(idx) {
+    setLegalForm((prev) => {
+      const sections = [...(prev.sections || [])];
+      if (idx >= sections.length - 1) return prev;
+      [sections[idx], sections[idx + 1]] = [sections[idx + 1], sections[idx]];
+      return { ...prev, sections };
+    });
+  }
+
+  async function handleSaveLegal(e) {
+    e.preventDefault();
+    setSavingLegal(true);
+    setLegalSaveMsg("");
+
+    try {
+      const res = await fetch("/api/admin/legal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: selectedLegalKey, ...legalForm }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setLegalData((prev) => ({
+          ...prev,
+          [selectedLegalKey]: { ...prev[selectedLegalKey], ...legalForm },
+        }));
+        setLegalSaveMsg("✓ Legal page saved & published successfully!");
+      } else {
+        setLegalSaveMsg(`⚠ ${data.error || "Failed to save legal page"}`);
+      }
+    } catch {
+      setLegalSaveMsg("⚠ Network error while saving.");
+    } finally {
+      setSavingLegal(false);
+      setTimeout(() => setLegalSaveMsg(""), 4000);
     }
   }
 
@@ -181,6 +274,12 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
               className={`switcher-btn ${activeTab === "seo" ? "active" : ""}`}
             >
               🔍 SEO Manager
+            </button>
+            <button
+              onClick={() => setActiveTab("legal")}
+              className={`switcher-btn ${activeTab === "legal" ? "active" : ""}`}
+            >
+              ⚖️ Policies & Terms
             </button>
           </div>
         </div>
@@ -736,6 +835,316 @@ export default function AdminDashboard({ initialMessages, mongoStatus, initialSe
                   </button>
                   <span className="seo-auto-sync-hint">
                     ⚡ Changes take effect immediately across search engines and social share meta tags.
+                  </span>
+                </div>
+              </form>
+            </section>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════
+            TAB 3: LEGAL POLICIES & TERMS MANAGER
+        ════════════════════════════════════════════ */}
+        {activeTab === "legal" && (
+          <div className="admin-seo-layout">
+            {/* Sidebar of Legal Pages */}
+            <aside className="seo-pages-sidebar">
+              <div className="seo-sidebar-header">
+                <h3>Legal Documents</h3>
+                <span className="seo-badge">Live Editor</span>
+              </div>
+              <div className="seo-page-list">
+                {[
+                  { key: "privacy", name: "Privacy Policy", path: "/privacy-policy", icon: "🛡️" },
+                  { key: "terms", name: "Terms of Service", path: "/terms-of-service", icon: "📜" },
+                ].map((item) => {
+                  const isCurrent = selectedLegalKey === item.key;
+                  return (
+                    <button
+                      key={item.key}
+                      onClick={() => selectLegalPage(item.key)}
+                      className={`seo-page-item ${isCurrent ? "active" : ""}`}
+                    >
+                      <div className="seo-page-info">
+                        <strong>
+                          {item.icon} {item.name}
+                        </strong>
+                        <code>{item.path}</code>
+                      </div>
+                      <span className="seo-arrow">→</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div style={{ padding: "16px", borderTop: "1px solid rgba(255, 255, 255, 0.06)", marginTop: "12px" }}>
+                <p style={{ fontSize: "12px", color: "#a89f97", lineHeight: 1.6, margin: 0 }}>
+                  💡 <strong>Pro-tip for Admin & SEO:</strong> Edits here update the live text and clauses of the page immediately. To edit search engine titles or OpenGraph cards, switch to the <strong>SEO Manager</strong> tab.
+                </p>
+                <div style={{ marginTop: "14px" }}>
+                  <Link
+                    href={selectedLegalKey === "privacy" ? "/privacy-policy" : "/terms-of-service"}
+                    target="_blank"
+                    className="admin-btn-ghost"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontSize: "12px",
+                      padding: "6px 12px",
+                      border: "1px solid rgba(193, 138, 74, 0.3)",
+                    }}
+                  >
+                    View Published Page ↗
+                  </Link>
+                </div>
+              </div>
+            </aside>
+
+            {/* Legal Document Editor Form */}
+            <section className="seo-editor-container">
+              <div className="seo-editor-header">
+                <div>
+                  <span className="seo-tag-pill">
+                    Route: {selectedLegalKey === "privacy" ? "/privacy-policy" : "/terms-of-service"}
+                  </span>
+                  <h2>{selectedLegalKey === "privacy" ? "Privacy Policy Editor" : "Terms of Service Editor"}</h2>
+                </div>
+                {legalSaveMsg && <span className="seo-status-toast">{legalSaveMsg}</span>}
+              </div>
+
+              <form onSubmit={handleSaveLegal} className="seo-editor-form">
+                {/* Basic Document Info */}
+                <div
+                  style={{
+                    background: "rgba(255, 255, 255, 0.02)",
+                    border: "1px solid rgba(193, 138, 74, 0.18)",
+                    borderRadius: "12px",
+                    padding: "20px",
+                    display: "grid",
+                    gap: "18px",
+                  }}
+                >
+                  <h3 style={{ fontSize: "15px", color: "#f0bf58", margin: 0, fontWeight: 700 }}>
+                    1. Page Header & Introduction
+                  </h3>
+
+                  <div className="seo-form-row">
+                    <div className="seo-form-group" style={{ flex: 2 }}>
+                      <label>
+                        <span className="label-text">Page Heading / Title</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={legalForm.heading || ""}
+                        onChange={(e) => handleLegalInputChange("heading", e.target.value)}
+                        placeholder="Privacy Policy"
+                        required
+                        className="seo-input"
+                      />
+                    </div>
+
+                    <div className="seo-form-group" style={{ flex: 1 }}>
+                      <label>
+                        <span className="label-text">Eyebrow Tag</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={legalForm.eyebrow || ""}
+                        onChange={(e) => handleLegalInputChange("eyebrow", e.target.value)}
+                        placeholder="Legal & Compliance"
+                        className="seo-input"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="seo-form-group">
+                    <label>
+                      <span className="label-text">Lead Paragraph / Last Updated Notice</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={legalForm.leadText || ""}
+                      onChange={(e) => handleLegalInputChange("leadText", e.target.value)}
+                      placeholder="Last updated: November 2026. Your privacy and trust are paramount..."
+                      required
+                      className="seo-textarea"
+                    />
+                  </div>
+                </div>
+
+                {/* Clauses / Sections */}
+                <div
+                  style={{
+                    background: "rgba(255, 255, 255, 0.02)",
+                    border: "1px solid rgba(193, 138, 74, 0.18)",
+                    borderRadius: "12px",
+                    padding: "20px",
+                    display: "grid",
+                    gap: "18px",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                    <div>
+                      <h3 style={{ fontSize: "15px", color: "#f0bf58", margin: 0, fontWeight: 700 }}>
+                        2. Document Clauses & Sections ({legalForm.sections?.length || 0})
+                      </h3>
+                      <p style={{ fontSize: "12px", color: "#a89f97", margin: "4px 0 0" }}>
+                        Add, reorder, or update individual sections and privacy clauses.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addSection}
+                      className="admin-btn-secondary"
+                      style={{ cursor: "pointer", padding: "8px 14px" }}
+                    >
+                      + Add New Section
+                    </button>
+                  </div>
+
+                  <div style={{ display: "grid", gap: "16px" }}>
+                    {(legalForm.sections || []).map((sec, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          background: "rgba(0, 0, 0, 0.25)",
+                          border: "1px solid rgba(255, 255, 255, 0.08)",
+                          borderRadius: "10px",
+                          padding: "16px",
+                          display: "grid",
+                          gap: "12px",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+                          <span style={{ fontSize: "12px", fontWeight: 700, color: "#f0bf58", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                            Clause #{idx + 1}
+                          </span>
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <button
+                              type="button"
+                              onClick={() => moveSectionUp(idx)}
+                              disabled={idx === 0}
+                              title="Move up"
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(255, 255, 255, 0.1)",
+                                color: idx === 0 ? "#555" : "#ddd",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                cursor: idx === 0 ? "not-allowed" : "pointer",
+                                fontSize: "11px",
+                              }}
+                            >
+                              ▲ Up
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveSectionDown(idx)}
+                              disabled={idx === (legalForm.sections?.length || 0) - 1}
+                              title="Move down"
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(255, 255, 255, 0.1)",
+                                color: idx === (legalForm.sections?.length || 0) - 1 ? "#555" : "#ddd",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                cursor: idx === (legalForm.sections?.length || 0) - 1 ? "not-allowed" : "pointer",
+                                fontSize: "11px",
+                              }}
+                            >
+                              ▼ Down
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeSection(idx)}
+                              title="Remove section"
+                              style={{
+                                background: "rgba(220, 38, 38, 0.15)",
+                                border: "1px solid rgba(220, 38, 38, 0.3)",
+                                color: "#f87171",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                cursor: "pointer",
+                                fontSize: "11px",
+                              }}
+                            >
+                              ✕ Remove
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="seo-form-group">
+                          <input
+                            type="text"
+                            value={sec.title || ""}
+                            onChange={(e) => handleSectionChange(idx, "title", e.target.value)}
+                            placeholder={`e.g. ${idx + 1}. Clause Title`}
+                            required
+                            className="seo-input"
+                            style={{ fontWeight: 600 }}
+                          />
+                        </div>
+
+                        <div className="seo-form-group">
+                          <textarea
+                            rows={3}
+                            value={sec.content || ""}
+                            onChange={(e) => handleSectionChange(idx, "content", e.target.value)}
+                            placeholder="Clause description or legal details..."
+                            required
+                            className="seo-textarea"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Live Preview Box */}
+                <div style={{ background: "rgba(255, 255, 255, 0.02)", border: "1px solid rgba(193, 138, 74, 0.18)", borderRadius: "12px", padding: "20px" }}>
+                  <h3 style={{ fontSize: "15px", color: "#f0bf58", margin: "0 0 14px", fontWeight: 700 }}>
+                    3. Live Page Simulation (How visitors see it)
+                  </h3>
+                  <div
+                    style={{
+                      background: "#faf6f0",
+                      color: "#211a17",
+                      borderRadius: "8px",
+                      padding: "24px",
+                      border: "1px solid rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <p style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#8a5824", margin: "0 0 8px", fontWeight: 700 }}>
+                      {legalForm.eyebrow || "Legal & Compliance"}
+                    </p>
+                    <h2 style={{ fontSize: "24px", margin: "0 0 10px", color: "#211a17", fontFamily: "Georgia, serif" }}>
+                      {legalForm.heading || "Document Title"}
+                    </h2>
+                    <p style={{ fontSize: "14px", color: "#665e57", margin: "0 0 20px", fontStyle: "italic" }}>
+                      {legalForm.leadText || "No lead text specified."}
+                    </p>
+                    <div style={{ display: "grid", gap: "16px", borderTop: "1px solid #e5ded5", paddingTop: "16px" }}>
+                      {(legalForm.sections || []).map((sec, idx) => (
+                        <div key={idx}>
+                          <h4 style={{ fontSize: "15px", margin: "0 0 4px", color: "#211a17" }}>
+                            {sec.title || `Section ${idx + 1}`}
+                          </h4>
+                          <p style={{ fontSize: "13px", margin: 0, color: "#544d47", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+                            {sec.content || "Empty clause body..."}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="seo-actions-bar">
+                  <button type="submit" disabled={savingLegal} className="btn-save-seo">
+                    {savingLegal ? "Publishing Changes..." : "Save & Publish Legal Page ↗"}
+                  </button>
+                  <span className="seo-auto-sync-hint">
+                    ⚡ Changes instantly synchronize to database and update the live website page.
                   </span>
                 </div>
               </form>
