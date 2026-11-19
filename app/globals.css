@@ -885,6 +885,14 @@ textarea:focus-visible {
   font-style: italic;
 }
 
+@media (max-width: 640px) {
+  .inner-hero h1 {
+    font-size: clamp(30px, 8.2vw, 40px);
+    line-height: 1.15;
+    overflow-wrap: break-word;
+  }
+}
+
 .inner-visual {
   position: relative;
   min-height: 350px;
@@ -925,6 +933,134 @@ textarea:focus-visible {
   letter-spacing: .08em;
   text-transform: uppercase;
   backdrop-filter: blur(10px);
+}
+
+/* Service detail subpage hero visual */
+.service-sub-visual {
+  min-height: unset;
+}
+
+.service-sub-visual img {
+  width: 100%;
+  height: auto;
+  min-height: unset;
+  max-height: 420px;
+  object-fit: contain;
+  background: var(--bg-card);
+  padding: 16px 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-sub-visual:hover img {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 44px -18px rgba(53, 37, 23, 0.28), 0 8px 20px -8px rgba(53, 37, 23, 0.16);
+}
+
+@media (max-width: 640px) {
+  .service-sub-visual img {
+    padding: 12px 14px;
+    max-height: 280px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   PREMIUM SERVICE HERO ANIMATED ILLUSTRATIONS
+   (AI, IT & Digital Marketing: Unboxed, transparent, natural blend, balanced 50% width)
+════════════════════════════════════════════ */
+.service-hero-ai,
+.service-hero-it,
+.service-hero-marketing,
+.service-hero-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+}
+
+.service-hero-ai::before,
+.service-hero-ai::after,
+.service-hero-it::before,
+.service-hero-it::after,
+.service-hero-marketing::before,
+.service-hero-marketing::after,
+.service-hero-illustration::before,
+.service-hero-illustration::after {
+  display: none !important; /* Strictly no decorative boxes, card rims or borders */
+}
+
+.it-hero-graphic,
+.service-hero-graphic {
+  display: block;
+  width: 100%;
+  max-width: 680px;
+  position: relative;
+  background: transparent;
+}
+
+.it-hero-img,
+.service-hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: contain;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  filter: drop-shadow(0 14px 34px rgba(45, 32, 20, 0.08));
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.it-hero-graphic:hover .it-hero-img,
+.service-hero-graphic:hover .service-hero-img {
+  transform: translateY(-4px) scale(1.01);
+}
+
+@media (min-width: 900px) {
+  .inner-hero .sp {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 4vw, 56px);
+  }
+}
+
+@media (max-width: 899px) {
+  .service-hero-it,
+  .service-hero-marketing,
+  .service-hero-illustration {
+    margin-top: 36px !important;
+    justify-content: center;
+  }
+  .it-hero-graphic,
+  .service-hero-graphic {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-hero-it,
+  .service-hero-marketing,
+  .service-hero-illustration {
+    margin-top: 24px !important;
+  }
+  .it-hero-graphic,
+  .service-hero-graphic {
+    max-width: 100%;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .it-hero-graphic:hover .it-hero-img,
+  .service-hero-graphic:hover .service-hero-img {
+    transform: none !important;
+  }
 }
 
 /* ═══════════════════════════════════════════

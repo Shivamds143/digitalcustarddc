@@ -40,7 +40,8 @@ export default function SubServicePage({ params }) {
             <div>
               <p className="eyebrow">{panel.pill}</p>
               <h1>
-                {panel.title} <em>{panel.titleEm}</em>
+                {panel.title} <br />
+                <em>{panel.titleEm}</em>
               </h1>
               <p className="lead mt">{panel.desc}</p>
               <div className="row mt">
@@ -52,6 +53,24 @@ export default function SubServicePage({ params }) {
                 </Link>
               </div>
             </div>
+
+            {panel.image && (
+              <div className={`service-hero-illustration service-hero-${panel.id}`}>
+                <picture className="service-hero-graphic">
+                  <source srcSet={panel.image} type="image/webp" />
+                  {panel.gifImage && <source srcSet={panel.gifImage} type="image/gif" />}
+                  <img
+                    src={panel.staticImage || panel.image}
+                    alt={panel.imageAlt || `${panel.title} ${panel.titleEm}`}
+                    width={1376}
+                    height={768}
+                    className="service-hero-img"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </picture>
+              </div>
+            )}
           </div>
         </div>
       </section>
