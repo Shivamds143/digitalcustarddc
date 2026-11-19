@@ -444,7 +444,7 @@ export function Footer() {
                       className="ft-link ft-address-link"
                       title="Open address in Google Maps"
                     >
-                      106, 1st Floor, Samrat Nucleus, Bhabha Nagar, Nashik, India
+                      106, 1st Floor, Samrat Nucleus, Bhabha Nagar, Nashik, India,422011
                     </a>
                   </div>
                 </li>
